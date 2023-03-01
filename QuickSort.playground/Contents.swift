@@ -43,26 +43,30 @@ func findMax(
   )
 }
 
-// TODO: - Find another algorithm
+// Binary search via recursion
 
 func binarySearch<T: Comparable>(
-  array: [T],
-  target: T,
-  range: Range<Int> //= 0..<array.count
-) -> Int? {
-  guard range.startIndex < range.endIndex else { return nil }
+  _ array: [T],
+  for value: T,
+  in range: Range<Array.Index>? = nil
+) -> Array.Index? {
+  let range = range ?? array.startIndex..<array.endIndex
+  guard range.lowerBound < range.upperBound else { return nil }
   
-  let midIndex = range.startIndex + (range.endIndex - range.startIndex) / 2
-  guard array[midIndex] != target else { return midIndex }
-  
-  let newRange = array[midIndex] > target ? range.startIndex..<midIndex
-    : midIndex.advanced(by: 1)..<range.endIndex
-  
-  return binarySearch(array: array, target: target, range: newRange)
+  let size = array.distance(from: range.lowerBound, to: range.upperBound)
+  let middle = array.index(range.lowerBound, offsetBy: size / 2)
+
+  if array[middle] == value {
+    return middle
+  } else if array[middle] > value {
+    return binarySearch(array, for: value, in: range.lowerBound..<middle)
+  } else {
+    return binarySearch(array, for: value, in: array.index(after: middle)..<range.upperBound)
+  }
 }
 
 sumOfElements(array: [3, 5, 8])
 countOfElements(array: [3, 5, 8, 10, 12])
 findMax(in: [42, 30, 35, 1, 99, 0])
-let binarySearchArray = [42, 35, 50, 42, 30, 22]
-binarySearch(array: binarySearchArray, target: 42, range: 0..<binarySearchArray.count)
+let binarySearchArray = [2, 35, 50, 42, 30, 22]
+binarySearch(binarySearchArray, for: 42)
