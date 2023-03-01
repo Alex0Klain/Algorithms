@@ -65,8 +65,22 @@ func binarySearch<T: Comparable>(
   }
 }
 
+// Quick array sorting
+
+func quicksort(array: [Int]) -> [Int] {
+  guard array.count > 1 else { return array }
+  
+  let pivot = array[array.count / 2]
+  let less = array.filter { $0 < pivot }
+  let equal = array.filter { $0 == pivot }
+  let greater = array.filter { $0 > pivot }
+  
+  return quicksort(array: less) + equal + quicksort(array: greater)
+}
+
 sumOfElements(array: [3, 5, 8])
 countOfElements(array: [3, 5, 8, 10, 12])
 findMax(in: [42, 30, 35, 1, 99, 0])
 let binarySearchArray = [2, 35, 50, 42, 30, 22]
 binarySearch(binarySearchArray, for: 42)
+quicksort(array: [10, 5, 2, 3, 4])
